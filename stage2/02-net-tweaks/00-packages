@@ -1,3 +1,5 @@
-wpasupplicant wireless-tools firmware-atheros firmware-brcm80211 firmware-libertas firmware-ralink firmware-realtek
+# Wireless related packages are not needed in this image. Only used with a wired connection.
+#wpasupplicant wireless-tools firmware-atheros firmware-brcm80211 firmware-libertas firmware-ralink firmware-realtek
 raspberrypi-net-mods
 dhcpcd5
+isc-dhcp-server

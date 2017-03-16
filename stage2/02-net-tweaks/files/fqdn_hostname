@@ -1,0 +1,28 @@
+#!/usr/bin/env sh
+### BEGIN INIT INFO
+# Provides:          fqdn_hostname
+# Required-Start:    $remote_fs $syslog $network $named $copy_hostname
+# Required-Stop:		$remote_fs $syslog $network
+# Default-Start:     2
+# Default-Stop:
+# Short-Description: Check FQDN hostname.
+# Description:       Renew DHCP lease if no FQDN hostname is available.
+### END INIT INFO
+
+. /lib/lsb/init-functions
+
+set -e
+case "$1" in
+  start)
+   if [ $(hostname -A | grep $(hostname) | wc -w) -eq 0 ]; then
+      # If no FQDN hostname is found that contains the set hostname, then renew the dhcp lease.
+      echo "Expected hostname not found. Renewing DHCP lease..."
+      dhclient -r
+      dhclient eth0
+   fi
+    ;;
+  *)
+    echo "Usage: $0 start" >&2
+    exit 3
+    ;;
+esac

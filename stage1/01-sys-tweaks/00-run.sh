@@ -13,4 +13,7 @@ echo "pi:raspberry" | chpasswd
 echo "root:root" | chpasswd
 EOF
 
-
+on_chroot << EOF
+rm -rf /var/tmp
+ln -sf /tmp /var/tmp
+EOF

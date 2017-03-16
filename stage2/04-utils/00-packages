@@ -1,0 +1,3 @@
+# Libs that are probably needed for AVRdude
+libreadline6 libusb-0.1-4 libftdi1 libelf1 libc6
+openocd=0.9.*

@@ -1,0 +1,48 @@
+#!/usr/bin/env sh
+### BEGIN INIT INFO
+# Provides:          copy_hostname
+# Required-Start:    $remote_fs $syslog $network $named
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2
+# Default-Stop:
+# Short-Description: Copy hostname at boot time
+# Description:       Copies hostname from /boot/hostname.txt every time the Raspberry Pi boots.
+### END INIT INFO
+
+. /lib/lsb/init-functions
+
+set -e
+
+case "$1" in
+  start)
+     # Store current hostname.
+     CURRENT_HOSTNAME=$(cat /proc/sys/kernel/hostname | sed 's/ //g')
+
+     # By default use the serial number as the hostname.
+     NEW_HOSTNAME="rpi-""$( sed "s/^.*macaddr=\([0-9A-F:]*\) .*$/\1/;s/://g" /proc/cmdline )"
+     echo "Default hostname: $NEW_HOSTNAME"
+
+     # Check if hostname is explicitly set.
+     if [ -s /boot/hostname.txt ]; then
+        NEW_HOSTNAME=$(cat /boot/hostname.txt | sed 's/ //g')
+        echo "Configured hostname: $NEW_HOSTNAME"
+     fi
+
+     if [ "$CURRENT_HOSTNAME" != "$NEW_HOSTNAME" ]; then
+        echo "Hostname has changed."
+
+        # Write new hostname
+        echo $NEW_HOSTNAME > /etc/hostname
+
+        # Update hosts file
+        sed -i "s/127.0.1.1.*$CURRENT_HOSTNAME/127.0.1.1\t$NEW_HOSTNAME/g" /etc/hosts
+
+        # Activate it
+        hostname $NEW_HOSTNAME
+     fi
+    ;;
+  *)
+    echo "Usage: $0 start" >&2
+    exit 3
+    ;;
+esac
