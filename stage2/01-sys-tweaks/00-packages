@@ -15,4 +15,5 @@ apt-listchanges
 usb-modeswitch
 apt-transport-https
 libpam-chksshpwd
-openjdk-8-jre-headless logrotate gettext tmpreaper
+openjdk-8-jre-headless logrotate gettext
+-q --force-yes tmpreaper
