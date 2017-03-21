@@ -19,7 +19,7 @@ EOF
 			PACKAGES="$(sed -f "${SCRIPT_DIR}/remove-comments.sed" < ${i}-packages-nr)"
 			if [ -n "$PACKAGES" ]; then
 				on_chroot << EOF
-apt-get install --no-install-recommends -y $PACKAGES
+DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -yq $PACKAGES
 EOF
 			fi
 			log "End ${SUB_STAGE_DIR}/${i}-packages-nr"
@@ -29,7 +29,7 @@ EOF
 			PACKAGES="$(sed -f "${SCRIPT_DIR}/remove-comments.sed" < ${i}-packages)"
 			if [ -n "$PACKAGES" ]; then
 				on_chroot << EOF
-apt-get install -y $PACKAGES
+DEBIAN_FRONTEND=noninteractive apt-get install -yq $PACKAGES
 EOF
 			fi
 			log "End ${SUB_STAGE_DIR}/${i}-packages"
